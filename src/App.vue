@@ -1,85 +1,73 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue'
+const newTask = ref('')
+const todoList = ref([
+  { id: 'a0', taskName: 'Cras justo odio', completed: false },
+  { id: 'a1', taskName: 'Cras justo odio', completed: true }
+])
+
+const addToList = function (taskName) {
+  alert(taskName)
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div id="app" class="container my-3">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">待辦事項</span>
+      </div>
+      <input type="text" class="form-control" placeholder="準備要做的任務" v-model="newTask" />
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" @click="addToList(newTask)">新增</button>
+      </div>
     </div>
-  </header>
-
-  <RouterView />
+    <div class="card text-center">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">全部</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">進行中</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">已完成</a>
+          </li>
+        </ul>
+      </div>
+      <ul class="list-group list-group-flush text-left">
+        <li class="list-group-item" v-for="item in todoList">
+          <div class="d-flex">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" :id="item.id" />
+              <label
+                class="form-check-label"
+                :class="{ completed: item.completed }"
+                :for="item.id"
+                >{{ item.taskName }}</label
+              >
+            </div>
+            <button type="button" class="close ml-auto" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <input type="text" class="form-control" />
+        </li>
+      </ul>
+      <div class="card-footer d-flex justify-content-between">
+        <span>還有 3 筆任務未完成</span>
+        <a href="#">清除所有任務</a>
+      </div>
+    </div>
+  </div>
 </template>
 
+<style lang="css" src="@/assets/bootstrap.css"></style>
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.completed {
+  text-decoration: line-through;
 }
 </style>
